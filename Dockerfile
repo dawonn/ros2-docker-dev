@@ -15,5 +15,12 @@ RUN USER=docker && \
 
 COPY ros_entrypoint.sh /
 
-USER docker:docker
+# Enable sudo
+RUN apt-get update \
+ && apt-get install -y sudo \
+ && rm -rf /var/lib/apt/lists/*
 
+RUN adduser docker sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
+USER docker:docker
