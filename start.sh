@@ -12,6 +12,10 @@ then
         --name $DOCKER_TAG \
         --mount type=bind,src="$(pwd)",dst=/app \
         -u "$(id -u)":"$(id -g)" \
+        --runtime=nvidia \
+        -e DISPLAY=$DISPLAY \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -v $HOME/.Xauthority:/home/docker/.Xauthority \
         $DOCKER_TAG
 
     sleep 0.5

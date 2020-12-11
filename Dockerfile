@@ -1,4 +1,4 @@
-FROM osrf/ros:foxy-desktop@sha256:026bfcc35cade78021fa257ca9b91361e1eb0ba80b3ff2f49f39f87eca0299e0 AS foxy-desktop
+FROM osrf/ros2:nightly@sha256:f51d5390f7709e692f37dfe1f3b98f15de9f12aa403fe80cda794c3209a6504a AS foxy-nightly
 
 # Add runtime user & group
 # https://github.com/boxboat/fixuid
@@ -18,7 +18,8 @@ COPY ros_entrypoint.sh /
 
 # Enable sudo
 RUN apt-get update \
- && apt-get install -y sudo \
+ && apt-get install -y \
+ sudo \
  && rm -rf /var/lib/apt/lists/*
 
 RUN adduser $USER sudo
@@ -28,5 +29,19 @@ RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN echo source /opt/ros/${ROS_DISTRO}/setup.bash >> /home/$USER/.bashrc \
  && echo source /app/install/setup.bash >> /home/$USER/.bashrc
 
+# ROS Packages
+RUN apt-get update \
+ && apt-get install -y \
+ ros-foxy-rviz2 \
+ ros-foxy-rqt \
+ && rm -rf /var/lib/apt/lists/*
+
+# nvidia-container-runtime
+ENV NVIDIA_VISIBLE_DEVICES \
+    ${NVIDIA_VISIBLE_DEVICES:-all}
+ENV NVIDIA_DRIVER_CAPABILITIES \
+    ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
+    
+# Development User
 USER $USER:$GROUP
 WORKDIR /app
