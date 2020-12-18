@@ -5,3 +5,5 @@ log/
 
 a.out
 cpp/file.txt
+
+pkg/*

@@ -1,9 +1,20 @@
-FROM osrf/ros2:nightly@sha256:f51d5390f7709e692f37dfe1f3b98f15de9f12aa403fe80cda794c3209a6504a AS foxy-nightly
+FROM ros:foxy
 
-# Add runtime user & group
+# Add runtime user
 # https://github.com/boxboat/fixuid
 ARG USER=docker
 ARG GROUP=docker
+
+RUN apt-get update \
+    && apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg-agent \
+        software-properties-common \
+        git \
+        sudo \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN addgroup --gid 1000 $USER && \
     adduser --uid 1000 --ingroup $GROUP --disabled-password --gecos "" $USER
@@ -17,11 +28,6 @@ RUN curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.5/fixuid-0.
 COPY ros_entrypoint.sh /
 
 # Enable sudo
-RUN apt-get update \
- && apt-get install -y \
- sudo \
- && rm -rf /var/lib/apt/lists/*
-
 RUN adduser $USER sudo
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
