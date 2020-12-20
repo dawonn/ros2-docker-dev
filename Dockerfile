@@ -48,6 +48,14 @@ ENV NVIDIA_VISIBLE_DEVICES \
 ENV NVIDIA_DRIVER_CAPABILITIES \
     ${NVIDIA_DRIVER_CAPABILITIES:+$NVIDIA_DRIVER_CAPABILITIES,}graphics
     
+# MISC Packages
+RUN apt-get update \
+    && apt-get install -y \
+    vim \
+    less \
+    minicom \
+    && rm -rf /var/lib/apt/lists/*
+
 # Development User
 USER $USER:$GROUP
 WORKDIR /app
