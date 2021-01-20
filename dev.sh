@@ -75,7 +75,7 @@ start() {
             -e DISPLAY=$DISPLAY \
             -v /tmp/.X11-unix:/tmp/.X11-unix \
             -v $HOME/.Xauthority:/home/docker/.Xauthority \
-            --device /dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT1GUL07-if00-port0:/dev/vn100 \
+            #--device /dev/serial/by-id/usb-FTDI_USB-RS232_Cable_FT1GUL07-if00-port0:/dev/vn100 \
             --group-add dialout \
             $DOCKER_TAG
 
